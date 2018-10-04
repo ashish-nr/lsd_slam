@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   rosbag
 )
 
-find_package(Eigen REQUIRED)
+find_package (Eigen3 REQUIRED)
 find_package(X11 REQUIRED)
 include(cmake/FindG2O.cmake)
 include(cmake/FindSuiteParse.cmake)
@@ -41,8 +41,8 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
   LIBRARIES lsdslam
-  DEPENDS Eigen SuiteSparse
-  CATKIN_DEPENDS libg2o 
+  DEPENDS Eigen3 SuiteSparse
+  CATKIN_DEPENDS libg2o
 )
 
 # SSE flags
@@ -52,7 +52,7 @@ add_definitions("-DENABLE_SSE")
 # Also add some useful compiler flag
 set(CMAKE_CXX_FLAGS
    "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x"
-) 
+)
 
 # Set source files
 set(lsd_SOURCE_FILES
@@ -111,5 +111,3 @@ add_executable(dataset src/main_on_images.cpp)
 target_link_libraries(dataset lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
 
 # TODO add INSTALL
-
-
