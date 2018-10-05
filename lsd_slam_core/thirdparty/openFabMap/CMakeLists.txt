@@ -13,13 +13,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
 
 # # make a lib directory in the build directory
 # file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-# 
+#
 # # tell cmake that the library goes in the library directory
 # set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/lib)
-# 
+#
 # # make a binary directory in the build directory
 # file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-# 
+#
 # # tell cmake that the binaries goes in the binary directory
 # set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
@@ -31,7 +31,7 @@ FIND_PACKAGE(OpenCV REQUIRED)
 
 ############ openFABMAP library ##################
 # tell cmake about the library
-AUX_SOURCE_DIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/src OPENFABMAP_FILES) 
+AUX_SOURCE_DIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/src OPENFABMAP_FILES)
 
 # include the headers
 file(GLOB OPENFABMAP_INCS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
@@ -61,26 +61,24 @@ IF(OPENCV2_FOUND)
 			ENDFOREACH(LIB)
 		ENDIF(MINGW)
 	ELSE(WIN32)
-		TARGET_LINK_LIBRARIES(openFABMAP opencv_highgui opencv_core opencv_features2d opencv_imgproc opencv_nonfree)
+		TARGET_LINK_LIBRARIES(openFABMAP opencv_highgui opencv_core opencv_features2d opencv_imgproc opencv_contrib)
 	ENDIF(WIN32)
 ENDIF(OPENCV2_FOUND)
 
 
 ############ openFABMAPcli executable ##################
 # if(OPENCV2_FOUND)
-# 
+#
 # 	# tell the project where the settings file is  and copy it across when building (not used for now)
 # 	#file(GLOB SETTINGS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/samples/settings.yml")
 # 	#FILE(COPY ${SETTINGS_FILE} DESTINATION ${CMAKE_BINARY_DIR}/bin)
-# 
+#
 #     # tell cmake about the binary
 #     ADD_EXECUTABLE(openFABMAPcli ${CMAKE_SOURCE_DIR}/samples/openFABMAPcli.cpp ${SETTINGS_FILE})
-# 	
+#
 # 	# Tell openFABMAPcli to link against its required libs
 #     TARGET_LINK_LIBRARIES(openFABMAPcli openFABMAP)
-# 	
+#
 # endif(OPENCV2_FOUND)
 
 ############ end openFABMAP executable ##################
-
-

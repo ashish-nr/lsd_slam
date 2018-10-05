@@ -21,13 +21,13 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(cmake_modules REQUIRED)
-find_package(Eigen REQUIRED)
+find_package(Eigen3 REQUIRED)
 find_package(X11 REQUIRED)
 include(cmake/FindG2O.cmake)
 include(cmake/FindSuiteParse.cmake)
 
 #find csparse
-#FIND_PACKAGE(SuiteSparse)
+#FIND_PACKAGE(SuiteSparse REQUIRED)
 IF(CSPARSE_FOUND)
 MESSAGE(STATUS "CSPARSE FOUND")
 ELSE(CSPARSE_FOUND)
@@ -41,7 +41,7 @@ find_package(X11)
 if(NOT X11_FOUND)
 	message(FATAL_ERROR "Failed to find X11")
 endif(NOT X11_FOUND)
-      
+
 message("-- CHOLMOD_INCLUDE_DIR : " ${CHOLMOD_INCLUDE_DIR})
 message("-- CSPARSE_INCLUDE_DIR : " ${CSPARSE_INCLUDE_DIR})
 message("-- G2O_INCLUDE_DIR : " ${G2O_INCLUDE_DIR})
@@ -63,7 +63,7 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
   LIBRARIES lsdslam
-  DEPENDS Eigen SuiteSparse
+  DEPENDS Eigen3 SuiteSparse
   CATKIN_DEPENDS libg2o #lsd_slam_viewer
 )
 
@@ -78,9 +78,9 @@ add_definitions("-DENABLE_SSE")
 
 # Notes from stackoverflow:
 # The short solution would be removing '-march=native' option (at least it worked for me).
-# Instead of falling back to the default SSE2, if you care about performance, 
-# you are better off with enabling optimization the instruction set closest to AVX 
-# which would be SSE4.2. So I'd rather replace -march=native with -msse4.2. 
+# Instead of falling back to the default SSE2, if you care about performance,
+# you are better off with enabling optimization the instruction set closest to AVX
+# which would be SSE4.2. So I'd rather replace -march=native with -msse4.2.
 # Even better: -march=native -mno-avx. Or see the answer by @capisce
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -msse4.2 -Wall -D_REENTRANT --std=c++0x")
 
@@ -158,7 +158,7 @@ include_directories(
 
 # build shared library.
 add_library(lsdslam SHARED ${SOURCE_FILES})
-target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES} ${CSPARSE_LIBRARY}) 
+target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES} ${CSPARSE_LIBRARY})
 #csparse cxsparse )
 #rosbuild_link_boost(lsdslam thread)
 
@@ -173,5 +173,3 @@ add_executable(dataset src/main_on_images.cpp)
 target_link_libraries(dataset lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
 
 # TODO add INSTALL
-
-

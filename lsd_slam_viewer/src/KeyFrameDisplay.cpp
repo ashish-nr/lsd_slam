@@ -2,7 +2,7 @@
 * This file is part of LSD-SLAM.
 *
 * Copyright 2013 Jakob Engel <engelj at in dot tum dot de> (Technical University of Munich)
-* For more information see <http://vision.in.tum.de/lsdslam> 
+* For more information see <http://vision.in.tum.de/lsdslam>
 *
 * LSD-SLAM is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -29,12 +29,12 @@
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 #else
-	#include <GL/glx.h>
+	//#include <GL/glx.h>
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 #endif
 
-#include "opencv2/opencv.hpp"
+//#include "opencv2/opencv.hpp"
 
 #include "ros/package.h"
 
@@ -96,7 +96,7 @@ void KeyFrameDisplay::setFrom(lsd_slam_viewer::keyframeMsgConstPtr msg)
 	{
 		if(msg->pointcloud.size() != 0)
 		{
-			printf("WARNING: PC with points, but number of points not right! (is %zu, should be %u*%dx%d=%u)\n",
+			printf("WARNING: PC with points, but number of points not right! (is %zu, should be %lu*%dx%d=%lu)\n",
 					msg->pointcloud.size(), sizeof(InputPointDense), width, height, width*height*sizeof(InputPointDense));
 		}
 	}
@@ -404,4 +404,3 @@ void KeyFrameDisplay::drawPC(float pointSize, float alpha)
 		glLightfv (GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, LightColor);
 	}
 }
-

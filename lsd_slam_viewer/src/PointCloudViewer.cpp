@@ -2,7 +2,7 @@
 * This file is part of LSD-SLAM.
 *
 * Copyright 2013 Jakob Engel <engelj at in dot tum dot de> (Technical University of Munich)
-* For more information see <http://vision.in.tum.de/lsdslam> 
+* For more information see <http://vision.in.tum.de/lsdslam>
 *
 * LSD-SLAM is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -328,7 +328,7 @@ void PointCloudViewer::keyPressEvent(QKeyEvent *e)
     	  meddleMutex.lock();
 
 
-    	  float x,y,z;
+    	  qreal x,y,z;
     	  camera()->frame()->getPosition(x,y,z);
     	  animationList.push_back(AnimationObject(false, lastAnimTime, 2, qglviewer::Frame(qglviewer::Vec(0,0,0), camera()->frame()->orientation())));
     	  animationList.back().frame.setPosition(x,y,z);
@@ -432,4 +432,3 @@ void PointCloudViewer::keyPressEvent(QKeyEvent *e)
     	  break;
     }
   }
-

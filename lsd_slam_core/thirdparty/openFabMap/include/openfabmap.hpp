@@ -54,7 +54,7 @@ struct IMatch {
 	}
 
 	int queryIdx;	//query index
-	int imgIdx;		//test index 
+	int imgIdx;		//test index
 
 	double likelihood;	//raw loglikelihood
 	double match;		//normalised probability
@@ -127,7 +127,7 @@ protected:
 			const std::vector<cv::Mat>& testImgDescriptors,
 			std::vector<IMatch>& matches);
 	virtual double getNewPlaceLikelihood(const cv::Mat& queryImgDescriptor);
-	
+
 	//turn likelihoods into probabilities (also add in motion model if used)
 	void normaliseDistribution(std::vector<IMatch>& matches);
 
@@ -135,7 +135,7 @@ protected:
 	int pq(int q);
 	double Pzq(int q, bool zq);
 	double PzqGzpq(int q, bool zq, bool zpq);
-	
+
 	//FAB-MAP Core
 	double PzqGeq(bool zq, bool eq);
 	double PeqGL(int q, bool Lzq, bool eq);
@@ -163,7 +163,7 @@ protected:
 };
 
 /*
-	The original FAB-MAP algorithm, developed based on: 
+	The original FAB-MAP algorithm, developed based on:
 	http://ijr.sagepub.com/content/27/6/647.short
 */
 class FabMap1: public FabMap {
@@ -280,7 +280,7 @@ protected:
 	void getLikelihoods(const cv::Mat& queryImgDescriptor, const std::vector<
 			cv::Mat>& testImgDescriptors, std::vector<IMatch>& matches);
 	double getNewPlaceLikelihood(const cv::Mat& queryImgDescriptor);
-	
+
 	//the likelihood function using the inverted index
 	void getIndexLikelihoods(const cv::Mat& queryImgDescriptor, std::vector<
 			double>& defaults, std::map<int, std::vector<int> >& invertedMap,
@@ -303,8 +303,8 @@ protected:
 
 };
 /*
-	A Chow-Liu tree is required by FAB-MAP. The Chow-Liu tree provides an 
-	estimate of the	full distribution of visual words using a minimum spanning 
+	A Chow-Liu tree is required by FAB-MAP. The Chow-Liu tree provides an
+	estimate of the	full distribution of visual words using a minimum spanning
 	tree. The tree is generated through training data.
 */
 class ChowLiuTree {
@@ -342,10 +342,10 @@ private:
 
 	//selecting minimum spanning egdges with maximum information
 	bool reduceEdgesToMinSpan(std::list<info>& edges);
-	
+
 	//building the tree sctructure
 	cv::Mat buildTree(int root_word, std::list<info> &edges);
-	void recAddToTree(cv::Mat &cltree, int q, int pq, 
+	void recAddToTree(cv::Mat &cltree, int q, int pq,
 		std::list<info> &remaining_edges);
 	std::vector<int> extractChildren(std::list<info> &remaining_edges, int q);
 
