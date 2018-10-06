@@ -2,7 +2,7 @@
 * This file is part of LSD-SLAM.
 *
 * Copyright 2013 Jakob Engel <engelj at in dot tum dot de> (Technical University of Munich)
-* For more information see <http://vision.in.tum.de/lsdslam> 
+* For more information see <http://vision.in.tum.de/lsdslam>
 *
 * LSD-SLAM is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -62,10 +62,10 @@ class EdgeSim3 : public g2o::BaseBinaryEdge<7, Sophus::Sim3d, VertexSim3, Vertex
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	EdgeSim3();
-	
+
 	virtual bool read(std::istream& is);
 	virtual bool write(std::ostream& os) const;
-	
+
 	void computeError()
 	{
 		const VertexSim3* _from = static_cast<const VertexSim3*>(_vertices[0]);
@@ -75,7 +75,7 @@ public:
 		_error = error_.log();
 
 	}
-	
+
 	void linearizeOplus()
 	{
 		const VertexSim3* _from = static_cast<const VertexSim3*>(_vertices[0]);
@@ -90,14 +90,14 @@ public:
 		_measurement = m;
 		_inverseMeasurement = m.inverse();
 	}
-	
+
 	virtual bool setMeasurementData(const double* m)
 	{
-		Eigen::Map<const g2o::Vector7d> v(m);
+		Eigen::Map<const Sophus::Vector7d> v(m);
 		setMeasurement(Sophus::Sim3d::exp(v));
 		return true;
 	}
-	
+
 	virtual bool setMeasurementFromState()
 	{
 		const VertexSim3* from = static_cast<const VertexSim3*>(_vertices[0]);
@@ -108,7 +108,7 @@ public:
 	}
 
 	virtual double initialEstimatePossible(const g2o::OptimizableGraph::VertexSet& , g2o::OptimizableGraph::Vertex* ) { return 1.;}
-	
+
 	virtual void initialEstimate(const g2o::OptimizableGraph::VertexSet& from, g2o::OptimizableGraph::Vertex* /*to*/)
 	{
 		VertexSim3 *_from = static_cast<VertexSim3*>(_vertices[0]);
@@ -119,7 +119,7 @@ public:
 		else
 			_from->setEstimate(_to->estimate() * _inverseMeasurement);
 	}
-	
+
 protected:
 	Sophus::Sim3d _inverseMeasurement;
 };
