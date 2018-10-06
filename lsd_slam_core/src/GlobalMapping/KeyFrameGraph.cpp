@@ -2,7 +2,7 @@
 * This file is part of LSD-SLAM.
 *
 * Copyright 2013 Jakob Engel <engelj at in dot tum dot de> (Technical University of Munich)
-* For more information see <http://vision.in.tum.de/lsdslam> 
+* For more information see <http://vision.in.tum.de/lsdslam>
 *
 * LSD-SLAM is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -65,17 +65,30 @@ KFConstraintStruct::~KFConstraintStruct()
 KeyFrameGraph::KeyFrameGraph()
 : nextEdgeId(0)
 {
+    typedef g2o::BlockSolver< g2o::BlockSolverTraits<7,3> > BalBlockSolver;
+	typedef g2o::LinearSolverCSparse<BalBlockSolver::PoseMatrixType> BalLinearSolver;
+    std::unique_ptr<g2o::LinearSolver<BalBlockSolver::PoseMatrixType>> linearSolver;
+	//typedef g2o::LinearSolverPCG<BlockSolver::PoseMatrixType> LinearSolver;
+    auto cholesky = g2o::make_unique<BalLinearSolver>();
+    cholesky->setBlockOrdering(true);
+    linearSolver = std::move(cholesky);
+    g2o::OptimizationAlgorithmLevenberg* algorithm = new g2o::OptimizationAlgorithmLevenberg(
+        g2o::make_unique<BalBlockSolver>(std::move(linearSolver)));
+    graph.setAlgorithm(algorithm);
+
+    /*
 	typedef g2o::BlockSolver_7_3 BlockSolver;
 	typedef g2o::LinearSolverCSparse<BlockSolver::PoseMatrixType> LinearSolver;
 	//typedef g2o::LinearSolverPCG<BlockSolver::PoseMatrixType> LinearSolver;
 	LinearSolver* solver = new LinearSolver();
-	BlockSolver* blockSolver = new BlockSolver(solver);
+	std::unique_ptr<BlockSolver> blockSolver = std::make_unique(new BlockSolver(solver));
 	g2o::OptimizationAlgorithmLevenberg* algorithm = new g2o::OptimizationAlgorithmLevenberg(blockSolver);
 	graph.setAlgorithm(algorithm);
-	
+    */
+
     graph.setVerbose(false); // printOptimizationInfo
-	solver->setWriteDebug(true);
-	blockSolver->setWriteDebug(true);
+	//solver->setWriteDebug(true);
+	//blockSolver->setWriteDebug(true);
 	algorithm->setWriteDebug(true);
 
 
@@ -326,10 +339,10 @@ int KeyFrameGraph::optimize(int num_iterations)
 	// Abort if graph is empty, g2o shows an error otherwise
 	if (graph.edges().size() == 0)
 		return 0;
-	
+
 	graph.setVerbose(false); // printOptimizationInfo
 	graph.initializeOptimization();
-	
+
 
 	return graph.optimize(num_iterations, false);
 
@@ -340,7 +353,7 @@ int KeyFrameGraph::optimize(int num_iterations)
 void KeyFrameGraph::calculateGraphDistancesToFrame(Frame* startFrame, std::unordered_map< Frame*, int >* distanceMap)
 {
 	distanceMap->insert(std::make_pair(startFrame, 0));
-	
+
 	std::multimap< int, Frame* > priorityQueue;
 	priorityQueue.insert(std::make_pair(0, startFrame));
 	while (! priorityQueue.empty())
@@ -349,21 +362,21 @@ void KeyFrameGraph::calculateGraphDistancesToFrame(Frame* startFrame, std::unord
 		int length = it->first;
 		Frame* frame = it->second;
 		priorityQueue.erase(it);
-		
+
 		auto mapEntry = distanceMap->find(frame);
-		
+
 		if (mapEntry != distanceMap->end() && length > mapEntry->second)
 		{
 			continue;
 		}
-		
+
 		for (Frame* neighbor : frame->neighbors)
 		{
 			auto neighborMapEntry = distanceMap->find(neighbor);
-			
+
 			if (neighborMapEntry != distanceMap->end() && length + 1 >= neighborMapEntry->second)
 				continue;
-			
+
 			if (neighborMapEntry != distanceMap->end())
 				neighborMapEntry->second = length + 1;
 			else
