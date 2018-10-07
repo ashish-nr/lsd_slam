@@ -108,7 +108,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 else()
 	# SSE flags
 	set(CMAKE_CXX_FLAGS
-	"${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x"
+	"${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++14"
 	)
 endif()
 
@@ -147,6 +147,7 @@ set(SOURCE_FILES
 
 include_directories(
   include
+  ${catkin_INCLUDE_DIRS}
   ${EIGEN_INCLUDE_DIR}
   ${EIGEN3_INCLUDE_DIR}
   ${PROJECT_SOURCE_DIR}/src
