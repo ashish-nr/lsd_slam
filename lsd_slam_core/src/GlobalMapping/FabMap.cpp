@@ -90,8 +90,8 @@ FabMap::FabMap()
 // 	//fabMap = new of2::FabMapFBO(clTree, 0.39, 0, options, 3000, 1e-6, 1e-6, 512, 9);
 
 	// Create detector & extractor
-	detector = new cv::StarFeatureDetector(32, 10, 18, 18, 20);
-	cv::Ptr<cv::DescriptorExtractor> extractor = new cv::SURF(1000, 4, 2, false, true); // new cv::SIFT();
+	detector = cv::ORB::create(); //new cv::StarFeatureDetector(32, 10, 18, 18, 20);
+	cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(); //new cv::SURF(1000, 4, 2, false, true); // new cv::SIFT();
 
 	//use a FLANN matcher to generate bag-of-words representations
 	cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create("FlannBased"); // alternative: "BruteForce"
