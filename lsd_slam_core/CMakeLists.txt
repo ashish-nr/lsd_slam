@@ -11,7 +11,6 @@ set(CMAKE_BUILD_TYPE Release)
 
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
-  #lsd_slam_viewer
   cv_bridge
   dynamic_reconfigure
   sensor_msgs
