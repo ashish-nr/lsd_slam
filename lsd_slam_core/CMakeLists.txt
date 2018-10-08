@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   roscpp
   rosbag
+  message_generation
 )
 
 find_package(cmake_modules REQUIRED)
@@ -55,6 +56,9 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/openFabMap)
 include_directories(${PROJECT_SOURCE_DIR}/thirdparty/openFabMap/include)
 add_definitions("-DHAVE_FABMAP")
 set(FABMAP_LIB openFABMAP )
+
+add_message_files(DIRECTORY msg FILES keyframeMsg.msg keyframeGraphMsg.msg)
+generate_messages(DEPENDENCIES)
 
 generate_dynamic_reconfigure_options(
   cfg/LSDDebugParams.cfg
@@ -166,11 +170,13 @@ target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES}
 
 # build live ros node
 add_executable(live_slam src/main_live_odometry.cpp)
+add_dependencies(live_slam lsd_slam_core_generate_messages_cpp)
 target_link_libraries(live_slam lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES} ${X11_LIBRARIES} )
 
 
 # build image node
 add_executable(dataset src/main_on_images.cpp)
+add_dependencies(dataset lsd_slam_core_generate_messages_cpp)
 target_link_libraries(dataset lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
 
 # TODO add INSTALL
